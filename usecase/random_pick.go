@@ -4,8 +4,10 @@ import (
 	"encoding/csv"
 	"fmt"
 	"io/ioutil"
+	"math/rand"
 	"os"
 	"path/filepath"
+	"time"
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/daichidd/daigo-chan/discord"
@@ -20,10 +22,11 @@ const (
 	MAP_BASE      = "map"
 	DATA_EXT      = ".csv"
 
-	CUSTOM_COMMAND   = "カスタム"
-	SURVIVOR_COMMAND = "サバ"
-	IS_RANK_COMMAND  = "殿堂"
-	BAN_COMMAND      = "バン"
+	CUSTOM_COMMAND    = "カスタム"
+	SURVIVOR_COMMAND  = "サバ"
+	IS_RANK_COMMAND   = "殿堂"
+	BAN_COMMAND       = "バン"
+	FREQUENCY_COMMAND = "使用頻度"
 )
 
 var (
@@ -36,6 +39,7 @@ type PickResult struct {
 	HunterNickName    string
 	SurvivorNickNames []string
 	MapName           string
+	Count             int
 	Type              string
 }
 
@@ -128,6 +132,7 @@ func (m *PickResult) buildMessage() string {
 	survivor2 := "サバイバー2: %s \n"
 	survivor3 := "サバイバー3: %s \n"
 	survivor4 := "サバイバー4: %s \n"
+	frequencyStr := "使用頻度: %d"
 
 	survivorStr := survivor1 + survivor2 + survivor3 + survivor4
 	res := ""
@@ -158,6 +163,9 @@ func (m *PickResult) buildMessage() string {
 			m.HunterNickName,
 			m.SurvivorNickNames[0],
 		)
+	case FREQUENCY_COMMAND:
+		res = frequencyStr
+		res = fmt.Sprintf(res, m.Count)
 	}
 
 	return res
@@ -172,6 +180,7 @@ func RandomPicker(s *discordgo.Session, m *discordgo.MessageCreate, cmd []string
 		hunterRes         *model.Hunter
 		survivorNickNames []string
 		mapRes            *model.Map
+		cnt               int
 		cmdType           string
 	)
 
@@ -206,6 +215,15 @@ func RandomPicker(s *discordgo.Session, m *discordgo.MessageCreate, cmd []string
 			hunterRes = model.Hunters(hunters).RandomPick()
 			survivorRes := model.Survivors(survivors).RandomPickOnce()
 			survivorNickNames = append(survivorNickNames, survivorRes.NickName)
+		case FREQUENCY_COMMAND:
+			// hunterの方が数が少ない
+			cnt = len(hunters)
+			if cnt > len(survivors) {
+				cnt = len(survivors)
+			}
+
+			rand.Seed(time.Now().UnixNano())
+			cnt = rand.Intn(cnt)
 		}
 
 		cmdType = cmd[2]
@@ -230,6 +248,7 @@ func RandomPicker(s *discordgo.Session, m *discordgo.MessageCreate, cmd []string
 		HunterNickName:    hunterNickName,
 		SurvivorNickNames: survivorNickNames,
 		MapName:           mapName,
+		Count:             cnt,
 		Type:              cmdType,
 	}
 
