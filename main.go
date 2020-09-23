@@ -12,15 +12,20 @@ import (
 
 const (
 	DISCORD_TOKEN = "DISCORD_TOKEN"
+	HEROKU_ENV    = "HEROKU_ENV"
 )
 
 var (
-	token = ""
+	token    = ""
+	isHeroku = false
 )
 
 func init() {
-	if err := godotenv.Load(fmt.Sprintf("./%s.env", os.Getenv("GO_ENV"))); err != nil {
-		log.Fatal(err)
+	isHeroku = os.Getenv(HEROKU_ENV) != ""
+	if !isHeroku {
+		if err := godotenv.Load(fmt.Sprintf("./%s.env", os.Getenv("GO_ENV"))); err != nil {
+			log.Fatal(err)
+		}
 	}
 
 	token = os.Getenv(DISCORD_TOKEN)
