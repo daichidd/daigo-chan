@@ -27,6 +27,7 @@ const (
 	IS_RANK_COMMAND   = "殿堂"
 	BAN_COMMAND       = "バン"
 	FREQUENCY_COMMAND = "使用頻度"
+	MAP_COMMAND       = "マップ"
 )
 
 var (
@@ -166,6 +167,9 @@ func (m *PickResult) buildMessage() string {
 	case FREQUENCY_COMMAND:
 		res = frequencyStr
 		res = fmt.Sprintf(res, m.Count)
+	case MAP_COMMAND:
+		res = mapStr
+		res = fmt.Sprintf(res, m.MapName)
 	}
 
 	return res
@@ -224,6 +228,9 @@ func RandomPicker(s *discordgo.Session, m *discordgo.MessageCreate, cmd []string
 
 			rand.Seed(time.Now().UnixNano())
 			cnt = rand.Intn(cnt)
+		case MAP_COMMAND:
+			// 殿堂のみ。殿堂制限なしはゲーム側に実装されている
+			mapRes = model.Maps(maps).RandomPick(true)
 		}
 
 		cmdType = cmd[2]
