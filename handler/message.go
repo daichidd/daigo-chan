@@ -17,6 +17,7 @@ const (
 	DAIGO_COMMAND  = "第五"
 	RANDOM_COMMAND = "ランダム"
 	HELP_COMMAND   = "教えて"
+	LIST_COMMAND   = "一覧"
 )
 
 func MessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
@@ -54,7 +55,9 @@ func MessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 func commandRouting(s *discordgo.Session, m *discordgo.MessageCreate, cmd []string) error {
 	switch cmd[1] {
 	case HELP_COMMAND:
-		s.ChannelMessageSend(m.ChannelID, data.HelpText)
+		s.ChannelMessageSend(m.ChannelID, data.HELP_TEXT)
+	case LIST_COMMAND:
+		s.ChannelMessageSend(m.ChannelID, data.LIST_TEXT)
 	case RANDOM_COMMAND:
 		if err := usecase.RandomPicker(s, m, cmd); err != nil {
 			return err
