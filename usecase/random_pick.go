@@ -141,8 +141,7 @@ func (m *PickResult) buildMessage() string {
 	case "":
 		fallthrough
 	case SURVIVOR_COMMAND:
-		res += survivorStr
-		res = fmt.Sprintf(res,
+		res = fmt.Sprintf(survivorStr,
 			m.SurvivorNickNames[0],
 			m.SurvivorNickNames[1],
 			m.SurvivorNickNames[2],
@@ -165,11 +164,9 @@ func (m *PickResult) buildMessage() string {
 			m.SurvivorNickNames[0],
 		)
 	case FREQUENCY_COMMAND:
-		res = frequencyStr
-		res = fmt.Sprintf(res, m.Count)
+		res = fmt.Sprintf(frequencyStr, m.Count)
 	case MAP_COMMAND:
-		res = mapStr
-		res = fmt.Sprintf(res, m.MapName)
+		res = fmt.Sprintf(mapStr, m.MapName)
 	}
 
 	return res
