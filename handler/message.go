@@ -35,9 +35,10 @@ func MessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	// メンバーが機械に弱いのでregexpで半角全角空白に対応する
 	command := regexp.MustCompile("[/ /　]").Split(m.Content, -1)
+	call := callCommandChecker(command[0])
 
 	// for debug ignore not develop channel
-	if command[0] == DEBUG_DAIGO_COMMAND {
+	if call == DEBUG_DAIGO_COMMAND {
 		if m.ChannelID != DEBUG_CHANNEL_ID {
 			return
 		}
@@ -48,7 +49,7 @@ func MessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 	}
 
-	if command[0] == DAIGO_COMMAND {
+	if call == DAIGO_COMMAND {
 		// さゆ特別対応
 		if m.Author.ID == SAYU_ID {
 			s.ChannelMessageSend(m.ChannelID, data.SAYU_TEXT)
@@ -79,4 +80,15 @@ func commandRouting(s *discordgo.Session, m *discordgo.MessageCreate, cmd []stri
 	}
 
 	return nil
+}
+
+// ユーザーが機械得意ではないので、呼び出しコマンドの数字の半角全角もまとめて変換する
+// bytes.Readerの実装した方がよさそうだけどそこまでこだわるものでもないのでいつか
+// ともかくあとで整理する
+func callCommandChecker(cmd string) string {
+	// とりあえず一旦ベタ書き
+	if cmd == "第5" || cmd == "第５" {
+		return DAIGO_COMMAND
+	}
+	return cmd
 }
