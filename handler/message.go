@@ -13,6 +13,8 @@ const (
 	// general(一般)
 	DEBUG_CHANNEL_ID = "756882537485434952"
 	//DAIGO_CHAN_ID    = "756783428023746613"
+	SAYU_ID = "474138503719157760"
+	//LULUBELL_ID = "627705751460118539"
 
 	DAIGO_COMMAND  = "第五"
 	RANDOM_COMMAND = "ランダム"
@@ -45,6 +47,10 @@ func MessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	if command[0] == "第五" {
+		if m.Author.ID == SAYU_ID {
+			s.ChannelMessageSend(m.ChannelID, data.SAYU_TEXT)
+			return
+		}
 		// command routing
 		if err := commandRouting(s, m, command); err != nil {
 			log.Fatal(err)
