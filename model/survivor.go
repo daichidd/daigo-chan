@@ -1,6 +1,7 @@
 package model
 
 import (
+	"log"
 	"math/rand"
 	"time"
 
@@ -60,5 +61,7 @@ func (ms Survivors) RandomPickOnce() *Survivor {
 	rand.Seed(time.Now().UnixNano())
 	r := rand.Intn(len(ms))
 
+	// for debug
+	log.Println("r: %d, lenms: %d", r, len(ms))
 	return ms[r-1]
 }
