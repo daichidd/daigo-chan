@@ -13,7 +13,8 @@ const (
 	// general(一般)
 	DEBUG_CHANNEL_ID = "756882537485434952"
 	//DAIGO_CHAN_ID    = "756783428023746613"
-	SAYU_ID = "474138503719157760"
+	SAYU_ID  = "474138503719157760"
+	JERRY_ID = "576323553519992832"
 	//LULUBELL_ID = "627705751460118539"
 
 	DAIGO_COMMAND  = "第五"
@@ -49,6 +50,10 @@ func MessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if command[0] == "第五" {
 		if m.Author.ID == SAYU_ID {
 			s.ChannelMessageSend(m.ChannelID, data.SAYU_TEXT)
+			return
+		}
+		if m.Author.ID == JERRY_ID {
+			s.ChannelMessageSend(m.ChannelID, data.JERRY_TEXT)
 			return
 		}
 		// command routing
