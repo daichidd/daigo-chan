@@ -17,10 +17,11 @@ const (
 	JERRY_ID = "576323553519992832"
 	//LULUBELL_ID = "627705751460118539"
 
-	DAIGO_COMMAND  = "第五"
-	RANDOM_COMMAND = "ランダム"
-	HELP_COMMAND   = "教えて"
-	LIST_COMMAND   = "一覧"
+	DAIGO_COMMAND       = "第五"
+	DEBUG_DAIGO_COMMAND = "第六"
+	RANDOM_COMMAND      = "ランダム"
+	HELP_COMMAND        = "教えて"
+	LIST_COMMAND        = "一覧"
 )
 
 func MessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
@@ -36,7 +37,7 @@ func MessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	command := regexp.MustCompile("[/ /　]").Split(m.Content, -1)
 
 	// for debug ignore not develop channel
-	if command[0] == "第六" {
+	if command[0] == DEBUG_DAIGO_COMMAND {
 		if m.ChannelID != DEBUG_CHANNEL_ID {
 			return
 		}
@@ -47,7 +48,7 @@ func MessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 	}
 
-	if command[0] == "第五" {
+	if command[0] == DAIGO_COMMAND {
 		if m.Author.ID == SAYU_ID {
 			s.ChannelMessageSend(m.ChannelID, data.SAYU_TEXT)
 			return
