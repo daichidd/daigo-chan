@@ -49,10 +49,12 @@ func MessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	if command[0] == DAIGO_COMMAND {
+		// さゆ特別対応
 		if m.Author.ID == SAYU_ID {
 			s.ChannelMessageSend(m.ChannelID, data.SAYU_TEXT)
 			return
 		}
+		// ジェリー特別対応
 		if m.Author.ID == JERRY_ID {
 			s.ChannelMessageSend(m.ChannelID, data.JERRY_TEXT)
 			return

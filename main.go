@@ -21,6 +21,7 @@ var (
 )
 
 func init() {
+	// herokuではosの環境変数しか使えない
 	isHeroku = os.Getenv(HEROKU_ENV) != ""
 	if !isHeroku {
 		if err := godotenv.Load(fmt.Sprintf("./%s.env", os.Getenv("GO_ENV"))); err != nil {
