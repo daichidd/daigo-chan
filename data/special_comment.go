@@ -14,5 +14,5 @@ const SAYU_TEXT = `
 `
 
 const JERRY_TEXT = `
-:shiichan2:
+さゆじぇりは飽きた
 `
